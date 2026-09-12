@@ -10,7 +10,8 @@
 </head>
 <body style="margin:0;">
 <div id="root"></div>
-<script type="text/babel" data-presets="react">
+
+<script type="text/plain" id="component-source">
 const { useState, useRef, useLayoutEffect, useMemo } = React;
 
 const PINKS = ["#ff2f9e", "#ff6fc4", "#ffa8d8", "#ffd3ea", "#ff8fd1"];
@@ -396,9 +397,18 @@ function P53Hillock() {
   );
 }
 
+</script>
 
-const root = ReactDOM.createRoot(document.getElementById("root"));
-root.render(<P53Hillock />);
+<script>
+  const source = document.getElementById("component-source").textContent;
+  const output = Babel.transform(source, {
+    presets: [["react", { runtime: "classic" }]]
+  }).code;
+  const runnable = output + "
+const root = ReactDOM.createRoot(document.getElementById('root')); root.render(React.createElement(P53Hillock));";
+  const script = document.createElement("script");
+  script.text = runnable;
+  document.body.appendChild(script);
 </script>
 </body>
 </html>
